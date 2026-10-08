@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aqar Dev — Premium Real Estate</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Lenis Smooth Scroll CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.css" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0a0a0a;
+  --bg-elevated: #111111;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --text-primary: #f5f5f5;
+  --text-secondary: rgba(245, 245, 245, 0.6);
+  --accent: #c9a96e;
+  --accent-light: #e0c894;
+  --font-display: 'Host Grotesk', sans-serif;
+  --font-body: 'Host Grotesk', sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+body.is-loading {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor,
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.cursor {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+.cursor-follower {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+.cursor-follower.is-hovering {
+  width: 60px;
+  height: 60px;
+  border-color: var(--accent);
+  background: rgba(201, 169, 110, 0.08);
+}
+
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor, .cursor-follower { display: none; }
+}
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 10000;
+  background: transparent;
+}
+
+.scroll-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transform-origin: left;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.5rem 2rem;
+  transition: background 0.5s var(--ease-out), backdrop-filter 0.5s var(--ease-out);
+}
+
+.header.is-scrolled {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.logo__mark {
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.logo__accent {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.nav__link {
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.4s var(--ease-out);
+}
+
+.nav__link:hover {
+  color: var(--text-primary);
+}
+
+.nav__link:hover::after {
+  width: 100%;
+}
+
+.nav__link--cta {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.nav__link--cta::after { display: none; }
+
+.nav__link--cta:hover {
+  background: var(--accent);
+  color: var(--bg-dark);
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .menu-toggle { display: flex; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 2rem 4rem;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bg-image {
+  position: absolute;
+  inset: -20% 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.4) 0%,
+    rgba(10, 10, 10, 0.7) 50%,
+    var(--bg-dark) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero__eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.hero__title {
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.hero__title-line {
+  display: block;
+  overflow: hidden;
+}
+
+.hero__title-line--accent {
+  color: var(--accent);
+}
+
+.hero__subtitle {
+  max-width: 520px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.4s var(--ease-out);
+  cursor: none;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--bg-dark);
+}
+
+.btn--primary:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201, 169, 110, 0.25);
+}
+
+.btn--ghost {
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 2;
+}
+
+.scroll-indicator__lottie {
+  width: 40px;
+  height: 40px;
+}
+
+.scroll-indicator__text {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Hero Stats */
+.hero__stats {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 4rem auto 0;
+  width: 100%;
+  display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat__number {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat__label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section-header {
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+}
+
+.section-header--center {
+  text-align: center;
+}
+
+.section-header__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.section-header__title {
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   PROPERTIES (Horizontal Scroll)
+   ============================================================ */
+.properties {
+  padding: 8rem 0;
+  overflow: hidden;
+}
+
+.properties__track-wrapper {
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+.properties__track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  padding: 2rem 0;
+}
+
+.property-card {
+  flex: 0 0 340px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out), border-color 0.5s ease;
+}
+
+.property-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(201, 169, 110, 0.3);
+}
+
+.property-card__image {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.property-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.property-card:hover .property-card__image img {
+  transform: scale(1.08);
+}
+
+.property-card__badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35rem 0.9rem;
+  background: var(--accent);
+  color: var(--bg-dark);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 100px;
+}
+
+.property-card__badge--rent {
+  background: #4a90d9;
+  color: #fff;
+}
+
+.property-card__body {
+  padding: 1.5rem;
+}
+
+.property-card__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.property-card__location {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.property-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.property-card__price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.properties__progress {
+  max-width: 1400px;
+  margin: 2rem auto 0;
+  padding: 0 2rem;
+  height: 2px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.properties__progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+/* ============================================================
+   ABOUT (Pinned)
+   ============================================================ */
+.about {
+  padding: 8rem 0;
+}
+
+.about__pin {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.about__title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.about__text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.about__features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.about__feature-icon {
+  color: var(--accent);
+}
+
+.about__image {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.about__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+@media (max-width: 900px) {
+  .about__pin {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    min-height: auto;
+  }
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.services {
+  padding: 8rem 0;
+}
+
+.services__grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  transition: transform 0.5s var(--ease-out), border-color 0.5s ease, background 0.5s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201, 169, 110, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.service-card__icon {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-card__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.service-card__text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.testimonials {
+  padding: 8rem 0;
+}
+
+.testimonials__grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  transition: border-color 0.5s ease;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(201, 169, 110, 0.3);
+}
+
+.testimonial-card__text {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-card__author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.testimonial-card__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.testimonial-card__role {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   CTA
+   ============================================================ */
+.cta {
+  position: relative;
+  padding: 10rem 2rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cta__bg-image {
+  position: absolute;
+  inset: -20% 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--bg-dark) 0%,
+    rgba(10, 10, 10, 0.75) 50%,
+    var(--bg-dark) 100%
+  );
+}
+
+.cta__content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta__title {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.cta__text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.cta__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-subtle);
+  padding: 5rem 2rem 2rem;
+}
+
+.footer__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 2fr;
+  gap: 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.footer__brand .logo__mark,
+.footer__brand .logo__text {
+  font-size: 1.2rem;
+}
+
+.footer__tagline {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.footer__links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer__col h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.footer__col a {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.footer__col a:hover {
+  color: var(--text-primary);
+}
+
+.footer__bottom {
+  max-width: 1400px;
+  margin: 2rem auto 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .footer__links {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .footer__links {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero {
+    padding: 7rem 1.5rem 3rem;
+  }
+
+  .hero__stats {
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .properties__track-wrapper {
+    padding: 0 1.5rem;
+  }
+
+  .property-card {
+    flex: 0 0 280px;
+  }
+
+  .section-header {
+    padding: 0 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .about__pin {
+    padding: 0 1.5rem;
+  }
+
+  .services__grid,
+  .testimonials__grid {
+    padding: 0 1.5rem;
+  }
+
+  .cta {
+    padding: 7rem 1.5rem;
+  }
+
+  .footer {
+    padding: 4rem 1.5rem 2rem;
+  }
+}
+  </style>
+
+  <script>
+    /* ============================================================
+   AQAR DEV — GSAP Cinematic Scroll Experience
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ----------------------------------------------------------
+  // 1. REGISTER PLUGINS
+  // ----------------------------------------------------------
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ----------------------------------------------------------
+  // 2. LENIS SMOOTH SCROLL
+  // ----------------------------------------------------------
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+  });
+
+  // Sync Lenis with GSAP ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+
+  gsap.ticker.lagSmoothing(0);
+
+  // ----------------------------------------------------------
+  // 3. CUSTOM CURSOR
+  // ----------------------------------------------------------
+  const cursor = document.querySelector('.cursor');
+  const follower = document.querySelector('.cursor-follower');
+
+  if (cursor && follower) {
+    const mouse = { x: 0, y: 0 };
+    const pos = { x: 0, y: 0 };
+
+    document.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      gsap.to(cursor, { x: mouse.x, y: mouse.y, duration: 0.1, ease: 'power2.out' });
+    });
+
+    gsap.ticker.add(() => {
+      pos.x += (mouse.x - pos.x) * 0.12;
+      pos.y += (mouse.y - pos.y) * 0.12;
+      gsap.set(follower, { x: pos.x, y: pos.y });
+    });
+
+    // Hover effect on interactive elements
+    const hoverables = document.querySelectorAll('a, button, .property-card, .service-card');
+    hoverables.forEach((el) => {
+      el.addEventListener('mouseenter', () => follower.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => follower.classList.remove('is-hovering'));
+    });
+  }
+
+  // ----------------------------------------------------------
+  // 4. SCROLL PROGRESS BAR
+  // ----------------------------------------------------------
+  const progressBar = document.querySelector('.scroll-progress__bar');
+  if (progressBar) {
+    gsap.to(progressBar, {
+      width: '100%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+      },
+    });
+  }
+
+  // ----------------------------------------------------------
+  // 5. HEADER SCROLL STATE
+  // ----------------------------------------------------------
+  const header = document.querySelector('.header');
+  ScrollTrigger.create({
+    start: 'top -80',
+    onUpdate: (self) => {
+      header.classList.toggle('is-scrolled', self.direction === 1 || window.scrollY > 80);
+    },
+  });
+
+  // ----------------------------------------------------------
+  // 6. HERO PARALLAX + REVEAL
+  // ----------------------------------------------------------
+  // Parallax background
+  gsap.to('.hero__bg-image', {
+    y: '20%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  // Hero content reveal
+  const heroTl = gsap.timeline({ delay: 0.3 });
+
+  heroTl
+    .from('.hero__eyebrow', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    })
+    .from('.hero__title-line', {
+      y: '100%',
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: 'power4.out',
+    }, '-=0.5')
+    .from('.hero__subtitle', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    }, '-=0.6')
+    .from('.hero__actions .btn', {
+      y: 30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.15,
+      ease: 'power3.out',
+    }, '-=0.5')
+    .from('.scroll-indicator', {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: 'power3.out',
+    }, '-=0.3')
+    .from('.hero__stats .stat', {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+    }, '-=0.6');
+
+  // Animated counters
+  document.querySelectorAll('.stat__number').forEach((el) => {
+    const target = parseInt(el.getAttribute('data-count'), 10);
+    gsap.fromTo(el, 
+      { textContent: 0 },
+      {
+        textContent: target,
+        duration: 2,
+        ease: 'power2.out',
+        snap: { textContent: 1 },
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+        },
+      }
+    );
+  });
+
+  // ----------------------------------------------------------
+  // 7. HERO FADE-OUT ON SCROLL
+  // ----------------------------------------------------------
+  gsap.to('.hero__content', {
+    y: -80,
+    opacity: 0.3,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  // ----------------------------------------------------------
+  // 8. PROPERTIES — HORIZONTAL SCROLL
+  // ----------------------------------------------------------
+  const track = document.querySelector('.properties__track');
+  const progressBarEl = document.querySelector('.properties__progress-bar');
+
+  if (track && progressBarEl) {
+    const totalScroll = track.scrollWidth - window.innerWidth + 64;
+
+    gsap.to(track, {
+      x: -totalScroll,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.properties',
+        start: 'top top',
+        end: () => `+=${totalScroll}`,
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          progressBarEl.style.width = `${self.progress * 100}%`;
+        },
+      },
+    });
+
+    // Staggered reveal of property cards
+    gsap.from('.property-card', {
+      y: 80,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.properties',
+        start: 'top 70%',
+      },
+    });
+  }
+
+  // ----------------------------------------------------------
+  // 9. ABOUT — PINNED SECTION
+  // ----------------------------------------------------------
+  const aboutPin = document.querySelector('.about__pin');
+
+  if (aboutPin) {
+    // Fade-up reveal of about content
+    gsap.from('.about__title', {
+      y: 60,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top 75%',
+      },
+    });
+
+    gsap.from('.about__text', {
+      y: 40,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top 65%',
+      },
+    });
+
+    gsap.from('.about__feature', {
+      x: -30,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top 60%',
+      },
+    });
+
+    gsap.from('.about__image', {
+      x: 60,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top 60%',
+      },
+    });
+
+    // Pin the about section briefly for emphasis
+    ScrollTrigger.create({
+      trigger: '.about',
+      start: 'top top',
+      end: 'bottom bottom',
+      pin: aboutPin,
+      pinSpacing: false,
+    });
+  }
+
+  // ----------------------------------------------------------
+  // 10. SERVICES — STAGGERED REVEAL
+  // ----------------------------------------------------------
+  gsap.from('.service-card', {
+    y: 60,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.services__grid',
+      start: 'top 80%',
+    },
+  });
+
+  // ----------------------------------------------------------
+  // 11. TESTIMONIALS — STAGGERED REVEAL
+  // ----------------------------------------------------------
+  gsap.from('.testimonial-card', {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.testimonials__grid',
+      start: 'top 80%',
+    },
+  });
+
+  // ----------------------------------------------------------
+  // 12. CTA — PARALLAX + REVEAL
+  // ----------------------------------------------------------
+  gsap.to('.cta__bg-image', {
+    y: '25%',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.cta',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  gsap.from('.cta__title', {
+    y: 50,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.cta',
+      start: 'top 70%',
+    },
+  });
+
+  gsap.from('.cta__text', {
+    y: 30,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.cta',
+      start: 'top 65%',
+    },
+  });
+
+  gsap.from('.cta__actions .btn', {
+    y: 30,
+    opacity: 0,
+    duration: 0.7,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.cta',
+      start: 'top 60%',
+    },
+  });
+
+  // ----------------------------------------------------------
+  // 13. SECTION HEADERS — REVEAL
+  // ----------------------------------------------------------
+  gsap.utils.toArray('.section-header__title').forEach((title) => {
+    gsap.from(title, {
+      y: 40,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: title,
+        start: 'top 85%',
+      },
+    });
+  });
+
+  gsap.utils.toArray('.section-header__eyebrow').forEach((eyebrow) => {
+    gsap.from(eyebrow, {
+      y: 20,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: eyebrow,
+        start: 'top 90%',
+      },
+    });
+  });
+
+  // ----------------------------------------------------------
+  // 14. LOTTIE SCROLL INDICATOR
+  // ----------------------------------------------------------
+  if (typeof lottie !== 'undefined') {
+    lottie.loadAnimation({
+      container: document.getElementById('scrollLottie'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'https://assets10.lottiefiles.com/packages/lf20_zw0djhar.json',
+    });
+  }
+
+  // ----------------------------------------------------------
+  // 15. SMOOTH ANCHOR SCROLLING
+  // ----------------------------------------------------------
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        lenis.scrollTo(target, { offset: -80, duration: 1.5 });
+      }
+    });
+  });
+
+  // ----------------------------------------------------------
+  // 16. REFRESH SCROLLTRIGGER ON RESIZE
+  // ----------------------------------------------------------
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+  });
+
+});
+  </script>
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress">
+    <div class="scroll-progress__bar"></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="#" class="logo">
+        <img src="https://dyafa.com/uploads/0000/1/2024/10/17/dyafa-logohome-1-5-1-4.png" alt="" srcset="">
+        <!-- <span class="logo__mark">◈</span>
+        <span class="logo__text">AQAR<span class="logo__accent">DEV</span></span> -->
+      </a>
+      <nav class="nav">
+        <a href="#properties" class="nav__link">Properties</a>
+        <a href="#about" class="nav__link">About</a>
+        <a href="#services" class="nav__link">Services</a>
+        <a href="#testimonials" class="nav__link">Testimonials</a>
+        <a href="#contact" class="nav__link nav__link--cta">Contact</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <div class="hero__bg-image" style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80');"></div>
+      <div class="hero__overlay"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Premium Real Estate</p>
+      <h1 class="hero__title">
+        <span class="hero__title-line">Find Your</span>
+        <span class="hero__title-line hero__title-line--accent">Dream Property</span>
+        <span class="hero__title-line">in Saudi Arabia</span>
+      </h1>
+      <p class="hero__subtitle">
+        Discover exceptional villas, apartments, and commercial spaces curated for discerning buyers.
+      </p>
+      <div class="hero__actions">
+        <a href="#properties" class="btn btn--primary">Explore Properties</a>
+        <a href="#contact" class="btn btn--ghost">Book a Consultation</a>
+      </div>
+    </div>
+
+    <!-- Lottie Scroll Indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-indicator__lottie" id="scrollLottie"></div>
+      <span class="scroll-indicator__text">Scroll to explore</span>
+    </div>
+
+    <!-- Animated Stats -->
+    <div class="hero__stats">
+      <div class="stat">
+        <span class="stat__number" data-count="1250">0</span>
+        <span class="stat__label">Properties Listed</span>
+      </div>
+      <div class="stat">
+        <span class="stat__number" data-count="890">0</span>
+        <span class="stat__label">Happy Clients</span>
+      </div>
+      <div class="stat">
+        <span class="stat__number" data-count="45">0</span>
+        <span class="stat__label">Cities Covered</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURED PROPERTIES (Horizontal Scroll) ==================== -->
+  <section class="properties" id="properties">
+    <div class="section-header">
+      <p class="section-header__eyebrow">Featured Listings</p>
+      <h2 class="section-header__title">Properties That Define <br />Luxury Living</h2>
+    </div>
+
+    <div class="properties__track-wrapper">
+      <div class="properties__track">
+        <!-- Property Card 1 -->
+        <article class="property-card">
+          <div class="property-card__image">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80" alt="Luxury Villa" loading="lazy" />
+            <span class="property-card__badge">For Sale</span>
+          </div>
+          <div class="property-card__body">
+            <h3 class="property-card__title">Al Nakheel Villa</h3>
+            <p class="property-card__location">Riyadh, Saudi Arabia</p>
+            <div class="property-card__meta">
+              <span>5 Beds</span>
+              <span>6 Baths</span>
+              <span>450 m²</span>
+            </div>
+            <p class="property-card__price">SAR 4,500,000</p>
+          </div>
+        </article>
+
+        <!-- Property Card 2 -->
+        <article class="property-card">
+          <div class="property-card__image">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Modern Apartment" loading="lazy" />
+            <span class="property-card__badge property-card__badge--rent">For Rent</span>
+          </div>
+          <div class="property-card__body">
+            <h3 class="property-card__title">Jeddah Corniche Tower</h3>
+            <p class="property-card__location">Jeddah, Saudi Arabia</p>
+            <div class="property-card__meta">
+              <span>3 Beds</span>
+              <span>3 Baths</span>
+              <span>220 m²</span>
+            </div>
+            <p class="property-card__price">SAR 180,000 / year</p>
+          </div>
+        </article>
+
+        <!-- Property Card 3 -->
+        <article class="property-card">
+          <div class="property-card__image">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Penthouse" loading="lazy" />
+            <span class="property-card__badge">For Sale</span>
+          </div>
+          <div class="property-card__body">
+            <h3 class="property-card__title">The Royal Penthouse</h3>
+            <p class="property-card__location">Makkah, Saudi Arabia</p>
+            <div class="property-card__meta">
+              <span>4 Beds</span>
+              <span>5 Baths</span>
+              <span>380 m²</span>
+            </div>
+            <p class="property-card__price">SAR 7,200,000</p>
+          </div>
+        </article>
+
+        <!-- Property Card 4 -->
+        <article class="property-card">
+          <div class="property-card__image">
+            <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80" alt="Commercial Space" loading="lazy" />
+            <span class="property-card__badge">For Sale</span>
+          </div>
+          <div class="property-card__body">
+            <h3 class="property-card__title">Business Bay Office</h3>
+            <p class="property-card__location">Dammam, Saudi Arabia</p>
+            <div class="property-card__meta">
+              <span>Open Plan</span>
+              <span>2 Baths</span>
+              <span>600 m²</span>
+            </div>
+            <p class="property-card__price">SAR 3,100,000</p>
+          </div>
+        </article>
+
+        <!-- Property Card 5 -->
+        <article class="property-card">
+          <div class="property-card__image">
+            <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80" alt="Waterfront Estate" loading="lazy" />
+            <span class="property-card__badge">For Sale</span>
+          </div>
+          <div class="property-card__body">
+            <h3 class="property-card__title">Red Sea Waterfront Estate</h3>
+            <p class="property-card__location">KAEC, Saudi Arabia</p>
+            <div class="property-card__meta">
+              <span>6 Beds</span>
+              <span>7 Baths</span>
+              <span>720 m²</span>
+            </div>
+            <p class="property-card__price">SAR 12,000,000</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="properties__progress">
+      <div class="properties__progress-bar"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT (Pinned Section) ==================== -->
+  <section class="about" id="about">
+    <div class="about__pin">
+      <div class="about__content">
+        <p class="section-header__eyebrow">About Aqar Dev</p>
+        <h2 class="about__title">Redefining Real Estate in the Kingdom</h2>
+        <p class="about__text">
+          With over a decade of experience, Aqar Dev connects discerning buyers with Saudi Arabia's most exceptional properties. From the bustling streets of Riyadh to the serene shores of the Red Sea, we curate spaces that inspire.
+        </p>
+        <div class="about__features">
+          <div class="about__feature">
+            <span class="about__feature-icon">✦</span>
+            <span>Curated Portfolio</span>
+          </div>
+          <div class="about__feature">
+            <span class="about__feature-icon">✦</span>
+            <span>Expert Guidance</span>
+          </div>
+          <div class="about__feature">
+            <span class="about__feature-icon">✦</span>
+            <span>Seamless Transactions</span>
+          </div>
+        </div>
+      </div>
+      <div class="about__image">
+        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1000&q=80" alt="Luxury interior" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SERVICES (Staggered Cards) ==================== -->
+  <section class="services" id="services">
+    <div class="section-header section-header--center">
+      <p class="section-header__eyebrow">What We Offer</p>
+      <h2 class="section-header__title">Services Built Around You</h2>
+    </div>
+
+    <div class="services__grid">
+      <div class="service-card">
+        <div class="service-card__icon">🏠</div>
+        <h3 class="service-card__title">Property Sales</h3>
+        <p class="service-card__text">End-to-end support for buying and selling residential and commercial properties across the Kingdom.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">🔑</div>
+        <h3 class="service-card__title">Property Management</h3>
+        <p class="service-card__text">Full-service management for landlords and investors, from tenant screening to maintenance.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">📊</div>
+        <h3 class="service-card__title">Investment Advisory</h3>
+        <p class="service-card__text">Data-driven insights and market analysis to help you make confident real estate investments.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">📐</div>
+        <h3 class="service-card__title">Interior Design</h3>
+        <p class="service-card__text">Bespoke design services that transform properties into stunning, functional spaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIALS ==================== -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header section-header--center">
+      <p class="section-header__eyebrow">Client Stories</p>
+      <h2 class="section-header__title">Trusted by Hundreds of Families</h2>
+    </div>
+
+    <div class="testimonials__grid">
+      <blockquote class="testimonial-card">
+        <p class="testimonial-card__text">"Aqar Dev made our dream of owning a home in Riyadh a reality. Their team was professional, transparent, and genuinely cared about our needs."</p>
+        <footer class="testimonial-card__author">
+          <span class="testimonial-card__name">Ahmed Al-Rashid</span>
+          <span class="testimonial-card__role">Homeowner, Riyadh</span>
+        </footer>
+      </blockquote>
+      <blockquote class="testimonial-card">
+        <p class="testimonial-card__text">"As an investor, I rely on accurate market data. Aqar Dev consistently delivers insights that help me make informed decisions."</p>
+        <footer class="testimonial-card__author">
+          <span class="testimonial-card__name">Sara Al-Otaibi</span>
+          <span class="testimonial-card__role">Real Estate Investor</span>
+        </footer>
+      </blockquote>
+      <blockquote class="testimonial-card">
+        <p class="testimonial-card__text">"The property management team is exceptional. Our rental income has increased, and maintenance is handled swiftly."</p>
+        <footer class="testimonial-card__author">
+          <span class="testimonial-card__name">Khalid Al-Harbi</span>
+          <span class="testimonial-card__role">Property Owner, Jeddah</span>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ==================== CTA ==================== -->
+  <section class="cta" id="contact">
+    <div class="cta__bg">
+      <div class="cta__bg-image" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80');"></div>
+      <div class="cta__overlay"></div>
+    </div>
+    <div class="cta__content">
+      <h2 class="cta__title">Ready to Find Your <br />Next Property?</h2>
+      <p class="cta__text">Our advisors are available to guide you through every step of your real estate journey.</p>
+      <div class="cta__actions">
+        <a href="#" class="btn btn--primary">Get in Touch</a>
+        <a href="#" class="btn btn--ghost">Browse All Listings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="logo__mark">◈</span>
+        <span class="logo__text">AQAR<span class="logo__accent">DEV</span></span>
+        <p class="footer__tagline">Premium real estate, thoughtfully curated.</p>
+      </div>
+      <div class="footer__links">
+        <div class="footer__col">
+          <h4>Explore</h4>
+          <a href="#properties">Properties</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+        </div>
+        <div class="footer__col">
+          <h4>Support</h4>
+          <a href="#">Contact</a>
+          <a href="#">FAQ</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+        <div class="footer__col">
+          <h4>Follow</h4>
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 Aqar Dev. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
